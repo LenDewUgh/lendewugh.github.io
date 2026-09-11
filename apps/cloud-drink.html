@@ -1,469 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cloud Drink — Cabin Crew Order Management</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --sky: #0A84FF;
-      --cloud: #F0F4FF;
-      --midnight: #08091A;
-      --gold: #FFD166;
-      --champagne: #F7E8C8;
-      --blush: #FF6B8A;
-      --white: #FFFFFF;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--midnight);
-      color: var(--white);
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 2.5rem;
-      background: rgba(8,9,26,0.7);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.7rem;
-      letter-spacing: 0.08em;
-      color: var(--gold);
-    }
-    nav a {
-      color: rgba(255,255,255,0.65);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    nav a:hover { color: var(--gold); }
-    .nav-back::before { content: '← '; }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center;
-      padding: 8rem 2rem 6rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(10,132,255,0.35) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(255,107,138,0.2) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 50% at 20% 60%, rgba(255,209,102,0.12) 0%, transparent 60%);
-      animation: drift 12s ease-in-out infinite alternate;
-    }
-    @keyframes drift {
-      from { opacity: 0.8; transform: scale(1); }
-      to   { opacity: 1;   transform: scale(1.06); }
-    }
-
-    .cloud-blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.12;
-      animation: floatBlob linear infinite;
-    }
-    .blob1 { width: 500px; height: 200px; background: var(--sky); top: 20%; left: -10%; animation-duration: 22s; }
-    .blob2 { width: 400px; height: 150px; background: var(--champagne); top: 50%; right: -8%; animation-duration: 28s; animation-delay: -10s; }
-    .blob3 { width: 300px; height: 120px; background: var(--blush); bottom: 20%; left: 30%; animation-duration: 18s; animation-delay: -5s; }
-    @keyframes floatBlob {
-      0%   { transform: translateY(0px) translateX(0px); }
-      33%  { transform: translateY(-30px) translateX(20px); }
-      66%  { transform: translateY(20px) translateX(-15px); }
-      100% { transform: translateY(0px) translateX(0px); }
-    }
-
-    .hero-tag {
-      display: inline-block;
-      background: rgba(255,209,102,0.15);
-      border: 1px solid rgba(255,209,102,0.4);
-      color: var(--gold);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      padding: 0.4rem 1rem;
-      border-radius: 100px;
-      margin-bottom: 2rem;
-      position: relative;
-      animation: fadeUp 0.8s ease both;
-    }
-
-    .hero h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4rem, 12vw, 9rem);
-      line-height: 0.92;
-      letter-spacing: 0.02em;
-      position: relative;
-      animation: fadeUp 0.8s 0.15s ease both;
-    }
-    .hero h1 span { color: var(--sky); }
-
-    .hero-sub {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      font-weight: 300;
-      color: rgba(255,255,255,0.65);
-      max-width: 500px;
-      margin: 1.8rem auto 0;
-      line-height: 1.65;
-      position: relative;
-      animation: fadeUp 0.8s 0.3s ease both;
-    }
-
-    .hero-cta {
-      margin-top: 3rem;
-      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
-      position: relative;
-      animation: fadeUp 0.8s 0.45s ease both;
-    }
-    .btn-primary {
-      background: var(--sky);
-      color: #fff;
-      padding: 0.9rem 2.2rem;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-decoration: none;
-      letter-spacing: 0.04em;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 0 30px rgba(10,132,255,0.4);
-    }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(10,132,255,0.55); }
-
-    .btn-ghost {
-      border: 1px solid rgba(255,255,255,0.25);
-      color: rgba(255,255,255,0.8);
-      padding: 0.9rem 2.2rem;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-decoration: none;
-      letter-spacing: 0.04em;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── FEATURES ── */
-    .section {
-      padding: 6rem 2rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .section-label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--sky);
-      margin-bottom: 1rem;
-    }
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      line-height: 1;
-      letter-spacing: 0.02em;
-      margin-bottom: 3.5rem;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-    .feature-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 2rem;
-      transition: transform 0.25s, border-color 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-    .feature-card::after {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--sky), var(--blush));
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-    .feature-card:hover { transform: translateY(-6px); border-color: rgba(10,132,255,0.3); }
-    .feature-card:hover::after { opacity: 1; }
-
-    .feature-icon {
-      font-size: 2.2rem;
-      margin-bottom: 1.2rem;
-      display: block;
-    }
-    .feature-card h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.6rem;
-      color: var(--gold);
-    }
-    .feature-card p {
-      font-size: 0.92rem;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.65;
-    }
-
-    /* ── CLASSES BAND ── */
-    .classes-band {
-      background: linear-gradient(135deg, rgba(10,132,255,0.12), rgba(255,107,138,0.08));
-      border-top: 1px solid rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding: 4rem 2rem;
-      text-align: center;
-    }
-    .classes-inner { max-width: 900px; margin: 0 auto; }
-    .classes-band .section-title { margin-bottom: 1rem; }
-    .classes-band p {
-      color: rgba(255,255,255,0.55);
-      font-size: 1rem;
-      font-weight: 300;
-      max-width: 500px;
-      margin: 0 auto 3rem;
-      line-height: 1.7;
-    }
-    .class-tags {
-      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-    }
-    .class-tag {
-      padding: 0.7rem 1.8rem;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      letter-spacing: 0.06em;
-    }
-    .tag-first  { background: var(--gold); color: var(--midnight); }
-    .tag-premium { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
-
-    /* ── PRIVACY ── */
-    .privacy-section {
-      background: rgba(255,255,255,0.025);
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-    .privacy-section .section { max-width: 780px; }
-    .privacy-section h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      letter-spacing: 0.03em;
-      margin-bottom: 2.5rem;
-      color: var(--gold);
-    }
-    .privacy-block { margin-bottom: 2.2rem; }
-    .privacy-block h3 {
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--sky);
-      margin-bottom: 0.7rem;
-    }
-    .privacy-block p {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.75;
-    }
-    .privacy-effective {
-      display: inline-block;
-      background: rgba(255,209,102,0.1);
-      border: 1px solid rgba(255,209,102,0.25);
-      color: var(--gold);
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.35rem 0.85rem;
-      border-radius: 6px;
-      margin-bottom: 2rem;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      text-align: center;
-      padding: 3rem 2rem;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.3);
-      font-size: 0.82rem;
-      letter-spacing: 0.04em;
-    }
-    footer span { color: var(--gold); }
-
-    /* ── SCROLL REVEAL ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloud Drink — Drink orders, seat by seat · LenDew</title>
+<meta name="description" content="A drink pad for the cart. Tap the seat, build the order — mixer, mini, ice, garnish — and every open row stays in front of you. It never needed the Wi-Fi.">
+<link rel="canonical" href="https://lendewugh.github.io/apps/cloud-drink.html">
+<meta property="og:title" content="Cloud Drink — Drink orders, seat by seat · LenDew">
+<meta property="og:description" content="A drink pad for the cart. Tap the seat, build the order — mixer, mini, ice, garnish — and every open row stays in front of you. It never needed the Wi-Fi.">
+<meta property="og:type" content="website">
+<link rel="icon" href="../assets/icons/sus-spend.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sanchez:ital@0;1&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
 </head>
 <body>
-
-<!-- NAV -->
-<nav>
-  <a href="https://lendewugh.github.io" class="nav-back">All Apps</a>
-  <div class="nav-logo">☁ Cloud Drink</div>
-  <a href="#privacy">Privacy Policy</a>
+<nav class="nav" aria-label="Site">
+  <div class="wrap nav-in">
+    <a class="brand" href="../index.html"><span class="mark" aria-hidden="true">L</span><b>LenDew</b></a>
+    <div class="nav-links"><a href="../index.html">Home</a><a href="../apps/sus-spend.html">Sus Spend</a><a href="../apps/cloud-drink.html" aria-current=page>Cloud Drink</a><a href="../apps/sus-pay.html">Sus Pay</a><a href="../apps/losa.html">LOSA</a></div>
+  </div>
 </nav>
+<main>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="cloud-blob blob1"></div>
-  <div class="cloud-blob blob2"></div>
-  <div class="cloud-blob blob3"></div>
-
-  <div class="hero-tag">✈ For Flight Attendants</div>
-  <h1>CLOUD<br/><span>DRINK</span></h1>
-  <p class="hero-sub">The seamless drink order manager built for first and premium class cabin crew. Fast, offline-ready, and effortless at altitude.</p>
-  <div class="hero-cta">
-    <a href="#" class="btn-primary">Download on the App Store</a>
-    <a href="#features" class="btn-ghost">See Features</a>
+  <div class="wrap hero-app" style="--accent:var(--app-cloud-drink);--accent-txt:var(--app-cloud-drink-txt)">
+    <div>
+      <div class="icon-row"><span class="icon"><img src="../assets/icons/cloud-drink.png" alt="" width="44" height="44"></span><p class="eyebrow">Cloud Drink · On the App Store</p></div>
+      <h1>14C wanted the ginger ale.</h1>
+      <p class="tag">A drink pad for the cart. Tap the seat, build the order — mixer, mini, ice, garnish — and every open row stays in front of you. It never needed the Wi-Fi.</p>
+      <div class="cta"><a class="badge" href="https://apps.apple.com/us/app/cloud-drink/id6760086566">Download on the App Store</a><span class="price-big">$4.99 <span>once. No subscription.</span></span></div>
+    </div>
+    <figure class="phone-field" style="margin:0">
+      <div class="phone"><img src="../assets/shots/cloud-drink-1.webp" alt="Cloud Drink screenshot" width="1206" height="2622" loading="eager"></div>
+      <figcaption class="lede" style="font-size:14px;text-align:center;margin-top:16px">First cabin, rows 1–4. Tap a seat, build the pour, and the open list underneath keeps the row in front of you.</figcaption>
+    </figure>
   </div>
-</section>
-
-<!-- FEATURES -->
-<section class="section" id="features">
-  <div class="section-label">Why Cloud Drink</div>
-  <div class="section-title reveal">BUILT FOR<br/>THE CABIN</div>
-  <div class="features-grid">
-    <div class="feature-card reveal">
-      <span class="feature-icon">🥂</span>
-      <h3>Instant Order Capture</h3>
-      <p>Take drink orders quickly for every seat in first and premium class. No paper, no confusion — just fast, clean inputs.</p>
-    </div>
-    <div class="feature-card reveal">
-      <span class="feature-icon">📶</span>
-      <h3>100% Offline</h3>
-      <p>Works at 35,000 feet with zero connectivity. All data stays local on your device — no accounts, no cloud, no surprises.</p>
-    </div>
-    <div class="feature-card reveal">
-      <span class="feature-icon">🗂️</span>
-      <h3>Organised by Seat</h3>
-      <p>View orders by seat row so you always know who's waiting and what they ordered. Service stays smooth from takeoff to landing.</p>
-    </div>
-    <div class="feature-card reveal">
-      <span class="feature-icon">🔒</span>
-      <h3>Private by Design</h3>
-      <p>No data ever leaves your device. No accounts required. No tracking. Your passengers' orders stay completely private.</p>
-    </div>
-    <div class="feature-card reveal">
-      <span class="feature-icon">⚡</span>
-      <h3>Lightning Fast</h3>
-      <p>Designed for the pace of cabin service. Minimal taps to record an order, clear visual layout, zero friction.</p>
-    </div>
-    <div class="feature-card reveal">
-      <span class="feature-icon">📱</span>
-      <h3>Native iOS</h3>
-      <p>Built natively for iPhone. Feels right at home on iOS — responsive, smooth, and optimised for one-handed use.</p>
+  <div class="wrap sec" style="--accent:var(--app-cloud-drink);--accent-txt:var(--app-cloud-drink-txt)">
+    <p class="eyebrow">What it does</p><h2>Drink orders, seat by seat.</h2>
+    <div class="feats"><div class="feat"><div class="rule"></div><h3>The seat map</h3><p>Your cabin, your rows. Drag a passenger, tap a seat, see what&#x27;s still owed.</p></div><div class="feat"><div class="rule"></div><h3>The full pour</h3><p>Cocktails, minis, mixers, ice, garnish, coffee and decaf — built the way it&#x27;s actually asked for.</p></div><div class="feat"><div class="rule"></div><h3>Meals &amp; preorders</h3><p>Food inventory, preorders, and a reconciliation screen for when the count doesn&#x27;t match.</p></div><div class="feat"><div class="rule"></div><h3>Parties</h3><p>Travelling together, ordering together. Group the seats once and stop asking twice.</p></div></div>
+  </div>
+  <div class="wrap sec" style="--accent:var(--app-cloud-drink);--accent-txt:var(--app-cloud-drink-txt)">
+    <p class="eyebrow">Questions</p><h2>Before you buy.</h2>
+    <div class="faq"><div><h3>Which aircraft?</h3><p>Any. You build the cabin once — rows, letters, cabins — and it stays built.</p></div><div><h3>Does it need Wi-Fi?</h3><p>No. Everything runs on the device, including the flight timer on your Lock Screen.</p></div><div><h3>Is my airline okay with this?</h3><p>It&#x27;s a personal notepad, not a company system. It sends nothing anywhere.</p></div><div><h3>Subscription?</h3><p>No. $4.99 once.</p></div></div>
+  </div>
+  <div class="wrap" style="--accent:var(--app-cloud-drink);--accent-txt:var(--app-cloud-drink-txt)">
+    <div class="privacy-block">
+      <p class="big">We can't read it.<br>That's the design.</p>
+      <p class="lede">Cloud Drink stores everything on your device only. It does not use iCloud, has no account, and makes no network requests. <a href="../privacy.html#cloud-drink">Read the full Cloud Drink privacy policy.</a></p>
     </div>
   </div>
-</section>
-
-<!-- CLASS BAND -->
-<div class="classes-band">
-  <div class="classes-inner">
-    <div class="section-label">Cabin Coverage</div>
-    <div class="section-title reveal">FIRST & PREMIUM</div>
-    <p>Designed specifically for the elevated expectations of premium cabin service. Cloud Drink keeps your crew focused on hospitality, not admin.</p>
-    <div class="class-tags">
-      <span class="class-tag tag-first">✦ First Class</span>
-      <span class="class-tag tag-premium">◈ Premium Economy</span>
-      <span class="class-tag tag-premium">◈ Business Class</span>
-    </div>
-  </div>
-</div>
-
-<!-- PRIVACY POLICY -->
-<div class="privacy-section" id="privacy">
-  <div class="section">
-    <div class="section-label">Legal</div>
-    <h2>Privacy Policy</h2>
-    <div class="privacy-effective">Effective: March 2025</div>
-
-    <div class="privacy-block reveal">
-      <h3>Overview</h3>
-      <p>Cloud Drink ("the App") is designed with privacy at its core. The App does not collect, transmit, store, or share any personal information about you or your passengers. All data entered into the App remains solely on your device.</p>
-    </div>
-
-    <div class="privacy-block reveal">
-      <h3>Data Collection</h3>
-      <p>Cloud Drink does not collect any personal data. No names, device identifiers, usage analytics, crash reports, or any other information is gathered, stored externally, or transmitted to any server or third party.</p>
-    </div>
-
-    <div class="privacy-block reveal">
-      <h3>Local Storage Only</h3>
-      <p>Any information you enter into Cloud Drink — such as seat numbers or drink orders — is stored exclusively on your local device and is never sent anywhere. This data is used solely to power the App's functionality during your session.</p>
-    </div>
-
-    <div class="privacy-block reveal">
-      <h3>Third-Party Services</h3>
-      <p>Cloud Drink does not integrate with any third-party analytics platforms, advertising networks, or external services. No SDKs that collect data are included in the App.</p>
-    </div>
-
-    <div class="privacy-block reveal">
-      <h3>Children's Privacy</h3>
-      <p>Cloud Drink is a professional tool intended for use by adult flight attendants. It does not collect any data from any users, including children.</p>
-    </div>
-
-    <div class="privacy-block reveal">
-      <h3>Changes to This Policy</h3>
-      <p>If this privacy policy is updated, the new version will be posted at this URL. Continued use of the App after any changes constitutes acceptance of the updated policy.</p>
-    </div>
-
-    <div class="privacy-block reveal">
-      <h3>Contact</h3>
-      <p>If you have any questions about this privacy policy or the App, please reach out via the App Store support link on the Cloud Drink listing page.</p>
-    </div>
-  </div>
-</div>
-
-<!-- FOOTER -->
+</main>
 <footer>
-  <p>© 2025 <span>Cloud Drink</span> · All rights reserved · Privacy-first, offline-ready</p>
+  <div class="wrap foot">
+    <div class="col" style="min-width:220px"><b>LenDew</b><span>A house of quiet instruments for measuring, making, and mapping.</span></div>
+    <div class="col"><b>Apps</b><span><a href="../apps/sus-spend.html">Sus Spend</a> · <a href="../apps/cloud-drink.html">Cloud Drink</a> · <a href="../apps/sus-pay.html">Sus Pay</a> · <a href="../apps/losa.html">LOSA</a></span></div>
+    <div class="col"><b>Help</b><span><a href="../support.html">Support</a> · <a href="../privacy.html">Privacy</a></span></div>
+    <div class="col" style="margin-left:auto"><b>Independent</b><span>Made by one flight attendant.<br>© LenDew</span></div>
+  </div>
 </footer>
-
-<script>
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
-</script>
 </body>
 </html>
