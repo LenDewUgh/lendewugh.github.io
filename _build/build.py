@@ -146,9 +146,10 @@ e = html.escape
 def accent(a):
     return f'style="--accent:var(--app-{a["id"]});--accent-txt:var(--app-{a["id"]}-txt)"'
 
-def page(title, body, *, desc, rel="", current=None, canonical):
+def page(title, body, *, desc, rel="", current=None, canonical, icon="sus-spend", noindex=False):
     nav = f'<a href="{rel}index.html"{" aria-current=page" if current=="home" else ""}>Home</a>' + "".join(
         f'<a href="{rel}apps/{a["id"]}.html"{" aria-current=page" if current==a["id"] else ""}>{e(a["name"])}</a>' for a in APPS)
+    robots = '\n<meta name="robots" content="noindex">' if noindex else ""
     foot_apps = " · ".join(f'<a href="{rel}apps/{a["id"]}.html">{e(a["name"])}</a>' for a in APPS)
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -161,7 +162,7 @@ def page(title, body, *, desc, rel="", current=None, canonical):
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:type" content="website">
-<link rel="icon" href="{rel}assets/icons/sus-spend.png">
+<link rel="icon" href="{rel}assets/icons/{icon}.png">{robots}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sanchez:ital@0;1&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -254,7 +255,7 @@ def app_page(a):
     </div>
   </div>"""
     title = f'{a["store"]} — {a["line"].rstrip(".")} · LenDew'
-    return page(title, body, desc=a["tag"], rel="../", current=a["id"], canonical=f'{SITE}/apps/{a["id"]}.html')
+    return page(title, body, desc=a["tag"], rel="../", current=a["id"], canonical=f'{SITE}/apps/{a["id"]}.html', icon=a["id"])
 
 def support():
     rows = "".join(f'<dt>{e(a["store"])}</dt><dd>{e(STATUS[a["status"]][0])}</dd>' for a in APPS)
@@ -293,6 +294,62 @@ def privacy():
   </div>"""
     return page("Privacy · LenDew", body, desc="Privacy policy for Sus Spend, Cloud Drink, Sus Pay and LOSA: no account, no analytics, no server.", canonical=SITE+"/privacy.html")
 
+REDIRECTS = {
+  "apps/money-please.html": ("apps/sus-spend.html", "Sus Spend"),
+  "apps/pay-tracker.html":  ("apps/sus-pay.html",   "Sus Pay"),
+  "apps/cc-perks.html":     ("index.html",          "the LenDew home page"),
+}
+
+def not_found():
+    """404. Uses rel="/" so it renders correctly from any depth, because
+    GitHub Pages serves this one file for every missing path."""
+    links = " · ".join(f'<a href="/apps/{a["id"]}.html">{e(a["name"])}</a>' for a in APPS)
+    body = f"""
+  <div class="wrap doc">
+    <p class="eyebrow" style="color:var(--text-muted)">404</p>
+    <h1 style="margin-top:12px">That page isn't here.</h1>
+    <p>The link may be old, or the page may have moved. Everything LenDew makes is one tap away:</p>
+    <p>{links}</p>
+    <p class="muted" style="margin-top:32px">Still stuck? Email <a href="mailto:{SUPPORT_EMAIL}">{SUPPORT_EMAIL}</a> and say what you were looking for.</p>
+  </div>"""
+    return page("Page not found · LenDew", body, desc="That page isn't here.",
+                rel="/", canonical=SITE+"/404.html", noindex=True)
+
+def sitemap():
+    """No <lastmod>: a build-time date would change on every run and make the
+    output non-reproducible, and crawlers ignore a lastmod they can't trust."""
+    urls = [SITE + "/"] + [f'{SITE}/apps/{a["id"]}.html' for a in APPS] + \
+           [SITE + "/support.html", SITE + "/privacy.html"]
+    body = "".join(f"  <url><loc>{u}</loc></url>\n" for u in urls)
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            f'{body}</urlset>\n')
+
+def redirect(dest, label):
+    """Static hosting can't issue a real 301, so: instant meta refresh, a
+    canonical pointing at the successor, noindex, and a visible link if the
+    refresh is blocked."""
+    url = "/" + dest
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="refresh" content="0; url={url}">
+<meta name="robots" content="noindex">
+<title>Moved — LenDew</title>
+<link rel="canonical" href="{SITE}/{dest}">
+<link rel="icon" href="/assets/icons/sus-spend.png">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+  <div class="wrap doc">
+    <h1>This page moved.</h1>
+    <p>It's now at <a href="{url}">{label}</a>. Taking you there.</p>
+  </div>
+</body>
+</html>
+"""
+
 def write(rel, content):
     p = ROOT / rel; p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(content, encoding="utf-8"); print("wrote", rel, len(content.encode()) // 1024, "KB")
@@ -302,3 +359,6 @@ if __name__ == "__main__":
     for a in APPS: write(f"apps/{a['id']}.html", app_page(a))
     write("support.html", support())
     write("privacy.html", privacy())
+    write("404.html", not_found())
+    write("sitemap.xml", sitemap())
+    for src, (dest, label) in REDIRECTS.items(): write(src, redirect(dest, label))
