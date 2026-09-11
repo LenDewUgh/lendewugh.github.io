@@ -11,7 +11,7 @@ import html, os, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = "https://lendewugh.github.io"
-SUPPORT_EMAIL = "support@lendew.app"   # <- confirm with Lenny before launch
+SUPPORT_EMAIL = "lendewugh@icloud.com"
 
 APPS = [
   dict(
