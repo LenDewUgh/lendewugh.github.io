@@ -46,6 +46,18 @@ These are **not** generated and `_build/build.py` must never write them:
 apps** and in the AASA file. Renaming or moving them breaks invite links for
 users who already have the apps installed. Don't "tidy" them into `apps/`.
 
+Two things in these files look like mistakes and are not. Leave both alone:
+
+- **`com.LewDew.MoneyPlease` is correct.** "LewDew" (not "LenDew") was a typo
+  made when the app was first created and it shipped that way, so the bundle
+  ID is frozen — Apple does not allow changing it after publication.
+  "MoneyPlease" is likewise the app's original name; it is now Sus Spend.
+  Correcting either spelling would break universal links for every existing
+  user. The Pay Tracker entry, `com.lendew.PayTracker`, is correct as written.
+- **Pay Tracker's App Store link (`id6763399577`) is dead until the app
+  ships.** Known and accepted: the owner expects little traffic before launch
+  and is reachable by email. Don't remove the link or gate the page on it.
+
 They are deliberately self-contained (inline CSS and JS, no site stylesheet).
 Their inline script is what hands the invite to the app when the universal
 link doesn't fire. **Do not restyle them to match the site** until the invite
