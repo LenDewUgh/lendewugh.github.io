@@ -33,6 +33,27 @@ side and no staging. Push to `main` = publish.
 `.nojekyll` must stay at the root; without it GitHub ignores `_build/`
 inconsistently.
 
+## Hand-written exceptions: the app invite pages
+
+These are **not** generated and `_build/build.py` must never write them:
+
+- `.well-known/apple-app-site-association` — Apple universal-links file. No
+  file extension, no `.json`, no BOM. Must stay valid JSON.
+- `susspend/join/index.html`
+- `paytracker/join/index.html`
+
+`/susspend/join` and `/paytracker/join` are **hardcoded in the shipped iOS
+apps** and in the AASA file. Renaming or moving them breaks invite links for
+users who already have the apps installed. Don't "tidy" them into `apps/`.
+
+They are deliberately self-contained (inline CSS and JS, no site stylesheet).
+Their inline script is what hands the invite to the app when the universal
+link doesn't fire. **Do not restyle them to match the site** until the invite
+flow is confirmed working on a real device.
+
+They are intentionally absent from `sitemap.xml` — they are invite landing
+pages, not content.
+
 ## Invariants worth keeping
 
 - Every `.html` file contains exactly one `</html>`.

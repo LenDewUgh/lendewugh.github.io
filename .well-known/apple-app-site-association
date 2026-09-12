@@ -1,0 +1,24 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["TUUXPZ34Z8.com.LewDew.MoneyPlease"],
+        "components": [
+          {
+            "/": "/susspend/join*",
+            "comment": "Sus Spend group and trip invites"
+          }
+        ]
+      },
+      {
+        "appIDs": ["TUUXPZ34Z8.com.lendew.PayTracker"],
+        "components": [
+          {
+            "/": "/paytracker/join*",
+            "comment": "Pay Tracker schedule invites"
+          }
+        ]
+      }
+    ]
+  }
+}
