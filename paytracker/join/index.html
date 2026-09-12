@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Join a schedule on Pay Tracker</title>
+<title>Join a schedule on Suspicious Pay</title>
 <style>
   :root {
     --bg: #f6f5f1;
@@ -70,20 +70,20 @@
 </head>
 <body>
 <main>
-  <h1>You've been invited to a schedule on <span class="app">Pay Tracker</span></h1>
-  <p>Install Pay Tracker, then tap the invite link again — it'll open straight to the schedule.</p>
+  <h1>You've been invited to a schedule on <span class="app">Suspicious Pay</span></h1>
+  <p>Install Suspicious Pay, then tap the invite link again — it'll open straight to the schedule.</p>
 
   <!-- TODO: replace with the real App Store URL -->
-  <a class="cta" href="https://apps.apple.com/app/id6763399577">Get Pay Tracker</a>
+  <a class="cta" href="https://apps.apple.com/app/id6763399577">Get Suspicious Pay</a>
   <a class="secondary" id="retry" href="#">I already have it — open the invite</a>
 
-  <p class="fine">If the app is installed and this page still appears, open Pay Tracker first, then tap the link again.</p>
+  <p class="fine">If the app is installed and this page still appears, open Suspicious Pay first, then tap the link again.</p>
 </main>
 <script>
   // The share URL travels in ?s=. Hand it to the app via its own URL scheme.
   //
   // Why this exists: if the apple-app-site-association file is being served
-  // correctly, iOS opens Pay Tracker directly and this page is never seen. If it
+  // correctly, iOS opens Suspicious Pay directly and this page is never seen. If it
   // isn't (GitHub Pages can't set a Content-Type, and Apple is picky), the link
   // lands here instead — and this redirect still gets the invite into the right
   // app. Nothing happens if the app isn't installed, so the Get button stays.
