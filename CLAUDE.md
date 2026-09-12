@@ -84,6 +84,14 @@ flow is confirmed working on a real device.
 They are intentionally absent from `sitemap.xml` — they are invite landing
 pages, not content.
 
+**The full invite-link contract is in `INVITE-LINKS.md`** — read it before
+touching the AASA file, the join pages or anything under `.well-known/`. It
+covers the half that lives in the iOS apps (Associated Domains, URL schemes,
+the link format the apps must generate) and the AASA caching behaviour that
+explains why a correct setup can still appear broken on an existing install.
+That file is also meant to be copied into each Xcode project, since agents
+working there never see this one.
+
 ## Invariants worth keeping
 
 - Every `.html` file contains exactly one `</html>`.
