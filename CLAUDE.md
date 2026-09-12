@@ -57,12 +57,24 @@ Two things in these files look like mistakes and are not. Leave both alone:
 - **Pay Tracker's App Store link (`id6763399577`) is dead until the app
   ships.** Known and accepted: the owner expects little traffic before launch
   and is reachable by email. Don't remove the link or gate the page on it.
-- **The page at `/paytracker/join` says "Suspicious Pay" on purpose.** The
-  folder, URL scheme (`paytracker://`) and bundle ID keep the old internal
-  name because the app depends on them; the *visible* name must match the App
-  Store listing, which is "Suspicious Pay". Don't "fix" the wording to match
-  the folder. If the App Store name ever changes, update the visible text on
-  that page and the `store` field in `APPS` together.
+- **The join pages deliberately disagree with their own folder names.**
+  Each app carries three names, and they are not meant to match:
+
+  | | Sus Spend | Sus Pay |
+  |---|---|---|
+  | Folder (fixed, app depends on it) | `susspend/join` | `paytracker/join` |
+  | URL scheme (fixed) | `moneyplease://` | `paytracker://` |
+  | Visible text = App Store listing | Suspicious Spending | Suspicious Pay |
+
+  The folders and schemes keep the apps' original internal names because the
+  shipped apps are wired to them. The *visible* wording must match the App
+  Store listing, because the join page is the first thing a stranger sees and
+  the next thing they see is that listing. Don't "fix" the wording to match
+  the folder. If a listing name changes, update the visible text on that join
+  page and the `store` field in `APPS` together.
+
+  The short forms ("Sus Spend", "Sus Pay") are for the marketing site only —
+  never on a join page.
 
 They are deliberately self-contained (inline CSS and JS, no site stylesheet).
 Their inline script is what hands the invite to the app when the universal
