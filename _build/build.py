@@ -75,29 +75,31 @@ APPS = [
     id="sus-pay", name="Sus Pay", store="Suspicious Pay",
     line="Check the roster against the paycheck.",
     head="Count the hours before they do.",
-    tag="Import the roster, let it flag the reassignments, and see the month's credit before payroll closes. Free to keep the log; the pay engine is the part you subscribe to.",
-    price="Free", price_note="$2.99/month for the pay engine.",
+    tag="Sus Pay reads the trips in your CrewSchedule calendar and estimates what each one should pay under the contract — trip pay, boarding, per diem and A position. Free. First Class, with automatic trip updates, is coming later.",
+    price="Free", price_note="First Class coming soon, $2.99/month.",
     status="soon", store_url=None,
     sub="Check the roster against the paycheck.",
     shot_caption="July's take-home at the top, then every trip with its awarded credit, layovers and the pay it actually produced.",
     feats=[
-      ("Import the month","Pull trips straight from your roster PDF or your calendar — no retyping the pairing."),
-      ("Reassignment detection","It notices when the trip you flew stopped being the trip you were given, and reprices it."),
-      ("Your contract's rules","Rates, step increases, holidays, month splits and per-trip credit, calculated the way the contract reads them."),
-      ("Take-home","401(k), ESPP and tax percentages entered once, so the number on screen is the number that lands."),
+      ("Import from your calendar","Trips come straight from your CrewSchedule calendar — legs, positions, layovers and TFP. No retyping the pairing."),
+      ("Pay that shows its work","Base, boarding, per diem and A pay, each line labelled with the part of the contract it comes from."),
+      ("Honest about what's checked","Rules checked against real Alaska pay count toward your total. The rest are shown as not verified, or left out until they're right."),
+      ("Take-home","401(k), ESPP and your last paycheck entered once, so you see roughly what lands."),
     ],
     faq=[
       ("Is it out yet?","Not yet. This page goes live with the listing."),
-      ("What's free and what isn't?","Logging trips and keeping the record is free. The pay calculation is $2.99 a month."),
-      ("Does it read my roster?","It imports your roster PDF and your calendar. Nothing is sent to us — the parsing happens on the phone."),
+      ("What's free and what isn't?","Everything in the app today is free: calendar import, trip pay, weather and monthly summaries. First Class — automatic trip updates, delay pay and per diem that follows your actual times — is coming later at $2.99 a month. Features that are free now stay free."),
+      ("Does it read my schedule?","Only the CrewSchedule calendar you pick, read-only, on your phone. Nothing is sent to LenDew or to Alaska."),
+      ("How do I set it up?","Step by step in the Sus Pay guide — it's linked from the Support page."),
       ("Can I get my data out?","PDF report, any month."),
     ],
     privacy=[
-      "Your trips, rates and pay settings are stored on your device and, if iCloud is enabled, in your own private iCloud database. Roster PDFs and calendar events are parsed on the device; nothing is uploaded to LenDew, because LenDew has no server.",
-      "Calendar access is used only to read the trips you choose to import. You can revoke it at any time in Settings.",
-      "If you share your schedule with a friend, that schedule is shared through Apple's iCloud sharing with the people you pick, and only with them.",
-      "Weather and sunrise/sunset tiles fetch a forecast from Open-Meteo using the airport's coordinates. No personal data is sent — only a latitude, longitude and date.",
-      "The pay-engine subscription is handled entirely by Apple through the App Store. LenDew never sees your payment details.",
+      "Your trips, rates and pay history are stored on your device only. There is no account and no sign-in, and deleting the app deletes the data with it. Your pay is never uploaded anywhere.",
+      "Calendar access is read-only and is used only to read the CrewSchedule calendar you pick. You can turn it off at any time in Settings.",
+      "If you share your schedule, your trip names, dates and layover cities — never any pay — are stored in your own iCloud and shared through Apple's iCloud sharing with the people you invite, and only with them.",
+      "Layover weather is fetched from Open-Meteo using an airport's latitude, longitude and date — nothing about you.",
+      "Sunrise and sunset times use your own location, to about three kilometres, sent to that same service. It is not stored or shared.",
+      "If a paid tier is offered later, it will be handled entirely by Apple through the App Store. LenDew never sees your payment details.",
       "The app contains no analytics, no advertising and no third-party SDKs.",
     ],
   ),
@@ -265,6 +267,7 @@ def support():
     <h1 style="margin-top:12px">One person answers this.</h1>
     <p>Every LenDew app is made and supported by one person. Email <a href="mailto:{SUPPORT_EMAIL}">{SUPPORT_EMAIL}</a> with the app's name and what happened, and you'll hear back — usually within a couple of days, sooner if it's broken.</p>
     <h2>Before you write</h2>
+    <p><strong>Setting up Sus Pay?</strong> The <a href="sus-pay-guide.html">step-by-step Sus Pay guide</a> walks through connecting your work calendar, importing trips and reading your pay.</p>
     <p><strong>Purchases and refunds</strong> are handled by Apple, not by us: open the App Store, tap your picture, then <em>Purchase History</em>. Refund requests go through <a href="https://reportaproblem.apple.com">reportaproblem.apple.com</a>.</p>
     <p><strong>Sync</strong> in Sus Spend and Sus Pay runs through your own iCloud. If devices disagree, check that both are signed into the same Apple Account with iCloud Drive on.</p>
     <p><strong>Invites</strong> from Sus Spend and Sus Pay are iCloud share links. They open in the app they came from; if the app isn't installed yet, the link shows an App Store button first.</p>
@@ -274,6 +277,87 @@ def support():
     <p class="muted" style="margin-top:32px">LenDew is an independent studio. It isn't affiliated with any airline, and none of these apps are company systems.</p>
   </div>"""
     return page("Support · LenDew", body, desc="How to get help with Sus Spend, Cloud Drink, Sus Pay and LOSA.", canonical=SITE+"/support.html")
+
+def sus_pay_guide():
+    body = f"""
+  <div class="wrap doc" style="--accent:var(--app-sus-pay);--accent-txt:var(--app-sus-pay-txt)">
+    <p class="eyebrow">Suspicious Pay · Guide</p>
+    <h1 style="margin-top:12px">Set up Sus Pay, step by step.</h1>
+    <p>About ten minutes, once. You'll need your iPhone, your Alaska email and password, and your last paycheck. Sus Pay estimates your pay from your own schedule — it's not your paycheck, it's how you check it.</p>
+    <div class="toc"><a href="#calendar">1 · Calendar</a><a href="#setup">2 · Pay setup</a><a href="#connect">3 · Connect</a><a href="#import">4 · Import</a><a href="#premium">5 · Premium</a><a href="#trades">Trades</a><a href="#reading">Reading your pay</a><a href="#help">Troubleshooting</a></div>
+
+    <h2 id="calendar">1. Put your work calendar on your iPhone</h2>
+    <p>Sus Pay reads your trips from the CrewSchedule calendar that comes with your Alaska email. If you already see your trips in Apple's Calendar app, skip to step 2.</p>
+    <ol>
+      <li>Open the iPhone <strong>Settings</strong> app.</li>
+      <li>Tap <strong>Apps → Calendar → Calendar Accounts → Add Account</strong>.</li>
+      <li>Choose <strong>Microsoft Exchange</strong> and sign in with your Alaska email and password.</li>
+      <li>Make sure <strong>Calendars</strong> is switched on for that account.</li>
+      <li>Open Apple's Calendar app and check that your trips appear. It can take a few minutes the first time.</li>
+    </ol>
+
+    <h2 id="setup">2. Open Sus Pay and set up your pay</h2>
+    <p>The first time you open the app, a short tour explains how it works, then asks four things. You can change any of them later in <strong>≡ → Current Rate</strong>.</p>
+    <ol>
+      <li><strong>Seniority Date</strong> — sets your step on the pay scale, and every raise lands on the right date. Find it in Rainmaker: expand <strong>Crew Member Profile</strong> and look for <strong>Seniority Date</strong>. No Rainmaker handy? Use the year and date from your PeopleSoft “Step Progression Pay Increase” email instead.</li>
+      <li><strong>401(k)</strong> — the percentage you contribute.</li>
+      <li><strong>ESPP</strong> — the percentage you put into the stock purchase plan, if any.</li>
+      <li><strong>Take-home</strong> — from the bottom of your last paycheck, enter <strong>Current Total Gross</strong> and <strong>Current Net Pay</strong>.</li>
+    </ol>
+
+    <h2 id="connect">3. Let Sus Pay read your calendar</h2>
+    <ol>
+      <li>Tap <strong>≡</strong> (top right) → <strong>Current Rate</strong> and scroll to <strong>Calendar</strong>.</li>
+      <li>When iPhone asks, allow calendar access. Sus Pay only reads — it never changes your calendar.</li>
+      <li>Pick your <strong>CrewSchedule</strong> calendar. If it's the only work calendar, Sus Pay picks it for you.</li>
+    </ol>
+
+    <h2 id="import">4. Import your trips</h2>
+    <ol>
+      <li>On your trips list, tap the <strong>calendar button with the plus</strong>.</li>
+      <li>Sus Pay shows the trips it found from about three weeks back and months ahead. New ones are ticked.</li>
+      <li>Tap <strong>Import</strong>. Each trip arrives with its legs, layovers, positions and TFP, and its pay underneath.</li>
+    </ol>
+    <p><strong>Import each trip before you fly it.</strong> If flying is taken away from a trip mid-sequence, the calendar simply stops showing it — only a copy saved beforehand remembers what you were scheduled to fly. Importing once the trip appears on your schedule keeps that record.</p>
+
+    <h2 id="premium">5. Add premium, if the trip had it</h2>
+    <p>The calendar doesn't show whether a trip is premium, so Sus Pay can't know.</p>
+    <ol>
+      <li>Open the trip.</li>
+      <li>Tap <strong>Add</strong>.</li>
+      <li>Set the multiplier to match your roster — 1.5×, 2×, 2.5× or 3×.</li>
+    </ol>
+
+    <h2 id="trades">Traded, dropped or canceled a trip?</h2>
+    <p>If a trip leaves your calendar before it starts, it shows under <strong>No longer on your schedule</strong> the next time you open the import screen. Tap it and pick what happened:</p>
+    <ul>
+      <li><strong>Swap and Delete</strong> — you traded or dropped it. It comes off your month so it isn't counted twice.</li>
+      <li><strong>Keep and Pay Protect</strong> — the company canceled it. It stays, marked Pay Protected, and pays the way a protected trip does (no boarding or per diem). Changed your mind? Undo is on the trip's pay card.</li>
+      <li><strong>Keep for Now</strong> — not sure yet. Nothing changes, and it asks again next time.</li>
+    </ul>
+    <p>Once a trip has started, Sus Pay never offers to remove it — a trip that changes mid-sequence may be a reassignment, and the saved copy is your record of it.</p>
+
+    <h2 id="reading">Reading your pay</h2>
+    <p>Every pay line is one of three kinds:</p>
+    <ul>
+      <li><strong>In your total</strong> — checked against real Alaska pay and counted.</li>
+      <li><strong>Not verified</strong> — shown so you know to look, but left out of the total until real pay confirms it.</li>
+      <li><strong>Hidden</strong> — not right yet, so the app says nothing rather than something misleading.</li>
+    </ul>
+    <p>That makes a total here the conservative one — more likely low than high. <strong>≡ → What's Included</strong> lists exactly what the app covers today. Our contract is complex, and more rules are on the way.</p>
+    <p>Where Sus Pay and your pay disagree, treat it as a question to look into, not proof. Sus Pay doesn't file anything — if you find a shortfall, you claim it the way you always have. It isn't made by, affiliated with or endorsed by Alaska Airlines or AFA.</p>
+
+    <h2 id="help">Troubleshooting</h2>
+    <h3>No trips show up</h3>
+    <p>Check Apple's Calendar app first — if your trips aren't there, redo step 1. If they are, check iPhone <strong>Settings → Apps → Sus Pay → Calendars</strong> is allowed, and that CrewSchedule is picked in <strong>≡ → Current Rate</strong>.</p>
+    <h3>A leg's TFP looks wrong</h3>
+    <p>Tap the TFP figure on that leg to correct it. Sus Pay remembers the route for next time.</p>
+    <h3>I got a new phone</h3>
+    <p>Your trips live on your phone, so they move with an iPhone backup and restore. A fresh install without a backup starts empty.</p>
+    <h3>Something else looks wrong</h3>
+    <p>Tap <strong>≡ → Feedback</strong> — it opens an email with your app version attached. Or write to <a href="mailto:{SUPPORT_EMAIL}">{SUPPORT_EMAIL}</a> with the trip number and what you expected to see.</p>
+  </div>"""
+    return page("Sus Pay guide · LenDew", body, desc="Step-by-step setup for Suspicious Pay: connect your work calendar, set your seniority date, import trips and read your pay.", current="sus-pay", canonical=SITE+"/sus-pay-guide.html", icon="sus-pay")
 
 def privacy():
     toc = "".join(f'<a href="#{a["id"]}">{e(a["store"])}</a>' for a in APPS)
@@ -285,12 +369,14 @@ def privacy():
     <p class="eyebrow" style="color:var(--text-muted)">Privacy policy</p>
     <h1 style="margin-top:12px">We can't read it. That's the design.</h1>
     <p>LenDew apps have no accounts and no servers. There is no LenDew database anywhere that holds your data, so there is nothing for us to sell, leak or hand over. What follows is the specific version of that promise for each app.</p>
-    <p class="muted">Effective 11 September 2026. Questions: <a href="mailto:{SUPPORT_EMAIL}">{SUPPORT_EMAIL}</a>.</p>
+    <p class="muted">Effective 19 September 2026. Questions: <a href="mailto:{SUPPORT_EMAIL}">{SUPPORT_EMAIL}</a>.</p>
     <div class="toc">{toc}</div>
     {secs}
     <h2>All apps</h2>
     <p>None of the apps contain analytics, advertising, tracking or third-party SDKs, and none collect data for any purpose. Where an app uses iCloud, the data is stored in your private iCloud database under Apple's <a href="https://www.apple.com/legal/privacy/">privacy policy</a>; LenDew has no access to it. Purchases and subscriptions are processed by Apple.</p>
     <p>If this policy changes, the date above changes with it, and the change will be described here.</p>
+    <h3>Changes</h3>
+    <p><strong>19 September 2026</strong> — Suspicious Pay: corrected to say trips and pay are stored on your device only (not in iCloud), that only schedule sharing uses iCloud, and that sunrise and sunset times send your approximate location to Open-Meteo. Removed references to importing roster PDFs, which the app no longer does.</p>
   </div>"""
     return page("Privacy · LenDew", body, desc="Privacy policy for Sus Spend, Cloud Drink, Sus Pay and LOSA: no account, no analytics, no server.", canonical=SITE+"/privacy.html")
 
@@ -319,7 +405,7 @@ def sitemap():
     """No <lastmod>: a build-time date would change on every run and make the
     output non-reproducible, and crawlers ignore a lastmod they can't trust."""
     urls = [SITE + "/"] + [f'{SITE}/apps/{a["id"]}.html' for a in APPS] + \
-           [SITE + "/support.html", SITE + "/privacy.html"]
+           [SITE + "/support.html", SITE + "/sus-pay-guide.html", SITE + "/privacy.html"]
     body = "".join(f"  <url><loc>{u}</loc></url>\n" for u in urls)
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -358,6 +444,7 @@ if __name__ == "__main__":
     write("index.html", home())
     for a in APPS: write(f"apps/{a['id']}.html", app_page(a))
     write("support.html", support())
+    write("sus-pay-guide.html", sus_pay_guide())
     write("privacy.html", privacy())
     write("404.html", not_found())
     write("sitemap.xml", sitemap())

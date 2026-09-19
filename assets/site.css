@@ -169,6 +169,9 @@ img{max-width:100%}
 .doc .toc a:hover{background:var(--sunken)}
 .doc dl{display:grid; grid-template-columns:max-content 1fr; gap:6px var(--sp-5); font-size:var(--t-small)}
 .doc dt{color:var(--text-muted)} .doc dd{margin:0}
+.doc ol,.doc ul{padding-left:1.4em; margin-bottom:var(--sp-4)}
+.doc li{margin-bottom:8px}
+.doc li::marker{color:var(--accent-txt)}
 
 footer{border-top:1px solid var(--border); margin-top:var(--sp-9); padding-block:var(--sp-7) var(--sp-8)}
 .foot{display:flex; gap:var(--sp-6); flex-wrap:wrap; align-items:flex-start}
