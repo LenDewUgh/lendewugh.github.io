@@ -91,8 +91,9 @@ Consequences:
 - **Suspicious Spending** shipped before this file existed, so every existing
   install has the stale answer. Those users get the fallback page until they
   update or reinstall. That is not a bug.
-- **Suspicious Pay** has not shipped, so its first install fetches the file
-  fresh. Make sure Associated Domains is in the build before submitting.
+- **Suspicious Pay** shipped on 23 Nov 2026. Installs from the App Store fetch
+  the AASA file fresh, so universal links work on them if Associated Domains
+  made it into the submitted build — unverified here; test on a device.
 
 ## Status
 

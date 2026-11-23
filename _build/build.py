@@ -77,7 +77,7 @@ APPS = [
     head="Count the hours before they do.",
     tag="Sus Pay reads the trips in your CrewSchedule calendar and estimates what each one should pay under the contract — trip pay, boarding, per diem and A position. Free. First Class, with automatic trip updates, is coming later.",
     price="Free", price_note="First Class coming soon, $2.99/month.",
-    status="soon", store_url=None,
+    status="live", store_url="https://apps.apple.com/us/app/suspicious-pay/id6763399577",
     sub="Check the roster against the paycheck.",
     shot_caption="July's take-home at the top, then every trip with its awarded credit, layovers and the pay it actually produced.",
     feats=[

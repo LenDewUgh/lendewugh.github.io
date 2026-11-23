@@ -54,9 +54,10 @@ Two things in these files look like mistakes and are not. Leave both alone:
   "MoneyPlease" is likewise the app's original name; it is now Sus Spend.
   Correcting either spelling would break universal links for every existing
   user. The Pay Tracker entry, `com.lendew.PayTracker`, is correct as written.
-- **Pay Tracker's App Store link (`id6763399577`) is dead until the app
-  ships.** Known and accepted: the owner expects little traffic before launch
-  and is reachable by email. Don't remove the link or gate the page on it.
+- **Pay Tracker's App Store link (`id6763399577`) is live.** It was dead until
+  the app shipped; Suspicious Pay went on the App Store and was marked `live`
+  in `APPS` on 23 Nov 2026. Canonical URL:
+  `https://apps.apple.com/us/app/suspicious-pay/id6763399577`.
 - **The join pages deliberately disagree with their own folder names.**
   Each app carries three names, and they are not meant to match:
 
