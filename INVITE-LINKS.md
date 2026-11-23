@@ -91,9 +91,10 @@ Consequences:
 - **Suspicious Spending** shipped before this file existed, so every existing
   install has the stale answer. Those users get the fallback page until they
   update or reinstall. That is not a bug.
-- **Suspicious Pay** shipped on 23 Nov 2026. Installs from the App Store fetch
-  the AASA file fresh, so universal links work on them if Associated Domains
-  made it into the submitted build — unverified here; test on a device.
+- **Suspicious Pay** 1.0 (41) has been on the App Store since **28 Sep 2026**,
+  and its shipped build is confirmed complete (see Status below), so fresh
+  installs fetch the AASA file for the first time with everything already in
+  place. 1.0.1 is not submitted.
 
 ## Status
 
@@ -102,8 +103,30 @@ real device (12 Sep 2026): `moneyplease://join?s=test` typed into Safari
 opened the app. So the fallback path works, and **invites function today** —
 a recipient lands on the join page for a moment and is handed into the app.
 
-Universal links (the seamless path) are unverified and are a polish
-improvement, not a requirement. Nothing is broken while they are off.
+**Suspicious Pay's shipped build is confirmed complete.** Verified in the
+Xcode project at tag `v1.0` (`f53756e`) on 23 Nov 2026 — this is the code
+actually on the App Store as 1.0 (41):
+
+- `applinks:lendewugh.github.io` is in the **signed** entitlements.
+- The `paytracker` URL scheme is in the app's Info.plist.
+- `ShareInvite.wrap()` is applied to **every** invite: both share buttons go
+  through `CloudKitManager.shareLink`, which always wraps. Invites therefore
+  go out as `https://lendewugh.github.io/paytracker/join?s=…`, not Apple's
+  raw `icloud.com/share/<token>` URL.
+
+So Sus Pay needs **no new build for routing**. Both layers are shipped.
+
+Universal links are a polish improvement over the scheme fallback, not a
+requirement. Nothing is broken while they are off.
+
+**Still open on Sus Pay, both app-side:**
+
+- `publicPermission` is `.readOnly` in 1.0, so a **forwarded link still
+  works** — decision 2 in dev-notes (invite-only) is not done. This is a
+  sharing-policy gap, not a routing one.
+- **Nobody has tapped a real invite link on a device yet.** Everything above
+  is verified by reading shipped code and config, not by watching the flow
+  run. That end-to-end test is still outstanding for both apps.
 
 ## Testing
 
